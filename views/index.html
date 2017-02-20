@@ -1,0 +1,43 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: http://mozilla.github.io/nunjucks/ -->
+<!-- jade: http://jade-lang.com/ -->
+<!-- haml: http://haml.info/tutorial.html -->
+<!-- hbs(handlebars): http://handlebarsjs.com/expressions.html -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Component Architecture</title>
+    <meta name="description" content="Experiment with components">
+    <link id="favicon" rel="icon" href="https://gomix.com/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="import" href="views/language-selector.html">
+
+  </head>
+  <body>
+    <header>
+      <h1>
+        Language selector
+      </h1>
+    </header>
+
+    <main>    
+      <language-selector languages="[{locale:'sv_SE',isoCode:'sv',description:'Sverige',selected:true},{locale:'en_XX',isoCode:'en',description:'English'}]"></language-selector>            
+    </main>
+
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script>
+      const data = {
+        languageSelector:[{locale:"sv_SE",isoCode:"sv",description:"Sverige",selected:true},{locale:"en_XX",isoCode:"en",description:"English"}]
+      };
+    </script>
+    <script src="/client.js"></script>
+
+  </body>
+</html>
