@@ -2,20 +2,26 @@
   "//1": "describes your app and its dependencies",
   "//2": "https://docs.npmjs.com/files/package.json",
   "//3": "updating this file will download and update your packages",
-
   "name": "my-gomix-app",
   "version": "0.0.1",
   "description": "What am I about?",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "webpack": "webpack"
   },
   "dependencies": {
     "express": "^4.14.1"
   },
   "devDependencies": {
-    "webpack-dev-middleware": "^1.10.1",
-    "webpack": "^2.2.1"
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-react": "^6.23.0",
+    "web-components-loader": "^0.1.2",
+    "webpack": "^2.2.1",
+    "webpack-dev-middleware": "^1.10.1"
   },
   "engines": {
     "node": "6.9.x"
