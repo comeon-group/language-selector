@@ -29,6 +29,11 @@ app.get("/wc", function (request, response) {
   response.sendFile(__dirname + '/views/wc.html');
 });
 
+
+app.get("/webpack", function (request, response) {
+  response.sendFile(__dirname + '/views/webpack-test.html');
+});
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
