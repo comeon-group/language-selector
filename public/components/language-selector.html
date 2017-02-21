@@ -1,37 +1,68 @@
+<script src="https://unpkg.com/handlebars@4.0.6/dist/handlebars.min.js"></script>
+<script id="language-selector" type="text/x-handlebars-template">
+  <li><a href="#" data-lang='{{{lang}}}'>{{{description}}}</a></li>
+</script>
+<script id="language-selected" type="text/x-handlebars-template">
+  <button class="flag--square"><button>
+</script>
 <script>
-  class languageSelector extends HTMLElement {
+  class LanguageSelector extends HTMLElement {
     constructor() {
       super();
-      this._language = null;
     }
 
     static get observedAttributes() {
-      return ['language'];
+      return ['language', 'languages'];
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-      // name will always be "country" due to observedAttributes
-      this._language = newValue;
-      this._updateRendering();
+    attributeChangedCallback(name, oldValue={}, newValue={}) {
+      if(name === 'language'){
+        const selector = this.getElementsByTagName('button')[0];
+        const parsedOldValue = JSON.parse(!!oldValue ? oldValue : null);
+        const parsedNewValue = JSON.parse(!!newValue ? newValue : null);
+        
+        if(parsedOldValue && parsedOldValue.isoCode){
+          selector.classList.remove(`flag__${parsedOldValue.isoCode}--square`);
+        }
+        selector.classList.add(`flag__${parsedNewValue.isoCode}--square`);
+        selector.innerHTML = parsedNewValue.description;
+      }
     }
+    
     connectedCallback() {
       if(!this.languages){
         return
       }
       
-      const options = JSON.parse(this.getAttribute('languages'));
-      if(options.length <= 0){
+      this._languages = JSON.parse(this.getAttribute('languages'));
+      if(this._languages <= 0){
         return;
       }
-      
-      const element = document.createElement("select");
-      options.forEach((option) => {        
-          const optionElement = document.createElement("option");
-          optionElement.text = option.description;          
-          element.add(optionElement);          
-      });
+      const element = document.createElement('button');
+      element.classList.add('flag--square');
       this.appendChild(element);
-      this._updateRendering();
+      
+      element.addEventListener('click', this.click);
+      this._language = this._languages.find(language => language.selected);
+      this.language = JSON.stringify(this._language);
+      //element.innerHTML = this._language.description;
+      const templateSource   = document.currentScript.ownerDocument.querySelector("#language-selector").innerHTML;
+      const template = Handlebars.compile(templateSource);
+      const languages = this._languages.map((item) => {
+        item.lang = JSON.stringify(item);
+        const pt = template(item);
+        return pt;
+      });
+      const languageList = document.createElement('ul');
+      languageList.innerHTML = languages;
+      languageList.classList.add('language-list', 'hidden');
+      languageList.addEventListener('click', (e) => {
+        this.language = e.target.dataset.lang;
+      });
+      this.appendChild(languageList);
+    }
+    click(){
+      document.querySelector('.language-list').classList.toggle('hidden');
     }
     get languages() {
       return this.hasAttribute('languages');
@@ -43,5 +74,5 @@
       this.setAttribute('language', v);
     }
   }
-  customElements.define('language-selector', languageSelector);
+  customElements.define('language-selector', LanguageSelector);
 </script>

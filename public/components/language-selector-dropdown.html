@@ -1,0 +1,59 @@
+<template id="language-selector">
+  <h2>Country selector</h2>
+</template>
+
+<script>
+  class languageSelector extends HTMLElement {
+    constructor() {
+      super();
+      this._language = null;
+    }
+
+    static get observedAttributes() {
+      return ['language'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      // name will always be "country" due to observedAttributes
+      this._language = newValue;
+      this._updateRendering();
+    }
+    connectedCallback() {
+      if(!this.languages){
+        return
+      }
+      
+      const options = JSON.parse(this.getAttribute('languages'));
+      if(options.length <= 0){
+        return;
+      }
+      
+      const t = document.currentScript.ownerDocument.querySelector('#language-selector');
+      const instance = t.content.cloneNode(true);
+      
+      const element = document.createElement("select");
+      options.forEach((option) => {        
+          const optionElement = document.createElement("option");
+          optionElement.text = option.description;
+          optionElement.value = option.locale;
+          element.add(optionElement);          
+      });
+      element.addEventListener('change', this.change);
+      instance.appendChild(element);
+      this.appendChild(instance);
+    }
+    change(e){
+      console.log(e.target.value);
+    }
+    get languages() {
+      return this.hasAttribute('languages');
+    }
+    get language() {
+      return this.hasAttribute('language');
+    }
+    set language(v) {
+      this.setAttribute('language', v);
+    }
+  }
+  customElements.define('language-selector', languageSelector);
+</script>

@@ -2,8 +2,17 @@
 // where your node app starts
 
 // init project
-var express = require('express');
-var app = express();
+const express = require('express');
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const webpack = require("webpack");
+const webpackConfig = require("./webpack.config");
+
+const app = express();
+const compiler = webpack(webpackConfig);
+
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: "/" // Same as `output.publicPath` in most cases.
+}));
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
